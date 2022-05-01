@@ -6,8 +6,7 @@ Inspired by foobball.
 
 # Installation:
 
-Navigates to releases 
-
+Navigate to [releases](https://github.com/27m/rbxflipgwjoiner/releases/latest/) and download the latest release's source code.
 ## Windows
 
 Unzip the files into a directory.
