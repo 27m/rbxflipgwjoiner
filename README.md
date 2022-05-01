@@ -6,9 +6,31 @@ Inspired by foobball.
 
 # Installation:
 
+## Windows
+
 Unzip the files into a directory.
 
-Navigate to this directory.
+If you don't have python installed already, install it [here](https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe) (This link is for 64-bit if you are on 32-bit you can find the 32-bit installer [here](https://www.python.org/ftp/python/3.10.4/python-3.10.4.exe)).
+
+Run ``setup.bat``
+
+Put the corresponding information in ``config.json``.
+
+Open the command line
+
+![image](https://user-images.githubusercontent.com/70358442/166136292-72dac04f-dbb5-420b-84d8-44b5b0a2104a.png)
+
+Navigate to the script's directory with ``cd``.
+
+### Run the script with ``py main.py`` (NOTE: ``py`` may be ``python`` or ``python3`` for you depending on your installed python version).
+
+### OR double click main.py.
+
+Image for clarity below.
+
+![image](https://user-images.githubusercontent.com/70358442/166135582-7232e8eb-1a57-4a3a-b4cd-d8e364386a1f.png)
+
+## Linux
 
 Execute ``pip install -r requirements.txt``
 
@@ -16,11 +38,7 @@ Put the corresponding information in ``config.json``.
 
 Run the script with ``py main.py`` NOTE: ``py`` may be ``python`` or ``python3`` for you depending on your installed python version.
 
-Report any bugs to marshall#4949 on discord. 
-
-Image for clarity below.
-
-![image](https://user-images.githubusercontent.com/70358442/166135582-7232e8eb-1a57-4a3a-b4cd-d8e364386a1f.png)
+# Report any bugs to marshall#4949 on discord. 
 
 # How to get your RBXFlip token:
 
