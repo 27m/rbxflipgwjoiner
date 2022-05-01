@@ -2,6 +2,7 @@
 
 An automatic giveaway joiner for RBXFlip.
 
+Inspired by foobball.
 
 # Installation:
 
@@ -21,6 +22,14 @@ Report any bugs to marshall#4949 on discord.
 
 ![image](https://user-images.githubusercontent.com/70358442/166135270-906dbaec-583a-400d-8b8e-8abb7e98ae1c.png)
 (courtesy of foobball)
+
+# config.json variables
+
+access_token - This is your RBXFlip access token (how we authenticate giveaway join requests). Instructions on how to get this token are shown above.
+
+fetch_interval - This is how many seconds the program will wait in between fetching current giveaways, 60 or 120 is recommended. 
+
+webhook - This is your **full** webhook link ex: https://discord.com/api/webhooks/example
 
 # Disclaimer
 
