@@ -18,6 +18,10 @@ Run the script with ``py main.py`` NOTE: ``py`` may be ``python`` or ``python3``
 
 Report any bugs to marshall#4949 on discord. 
 
+Image for clarity below.
+
+![image](https://user-images.githubusercontent.com/70358442/166135582-7232e8eb-1a57-4a3a-b4cd-d8e364386a1f.png)
+
 # How to get your RBXFlip token:
 
 ![image](https://user-images.githubusercontent.com/70358442/166135270-906dbaec-583a-400d-8b8e-8abb7e98ae1c.png)
