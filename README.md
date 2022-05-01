@@ -6,6 +6,8 @@ Inspired by foobball.
 
 # Installation:
 
+Navigates to releases 
+
 ## Windows
 
 Unzip the files into a directory.
