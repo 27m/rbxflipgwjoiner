@@ -33,6 +33,8 @@ Image for clarity below.
 
 ## Linux
 
+Navigate to the script's directory.
+
 Execute ``pip install -r requirements.txt``
 
 Put the corresponding information in ``config.json``.
