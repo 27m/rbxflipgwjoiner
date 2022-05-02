@@ -52,7 +52,7 @@ Run the script with ``py main.py`` NOTE: ``py`` may be ``python`` or ``python3``
 
 access_token - This is your RBXFlip access token (how we authenticate giveaway join requests). Instructions on how to get this token are shown above.
 
-fetch_interval - This is how many seconds the program will wait in between fetching current giveaways, 60 or 120 is recommended. 
+fetch_interval - This is how many seconds the program will wait in between fetching current giveaways, 30-100 is recommended. 
 
 webhook - This is your **full** webhook link ex: https://discord.com/api/webhooks/example
 
