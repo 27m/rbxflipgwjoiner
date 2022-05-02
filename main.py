@@ -28,53 +28,62 @@ def get_giveaways():
 def get_image(itemid):
     try:
         itemimage = requests.get(f"https://thumbnails.roblox.com/v1/assets?assetIds={itemid}&size=420x420&format=Png&isCircular=false").json()['data'][0]['imageUrl']
-    except:
-        return "none"
+    except Exception:
+        return f"Image fetch failed, exception: {Exception}"
     return itemimage
 
 
-def join_giveaway(giveawayid, fliptoken):
-    headers = {
-        "authorization": "Bearer " + fliptoken
-    }
-    resp = requests.put(f'https://legacy.rbxflip-apis.com/giveaways/{giveawayid}', headers=headers)
-    return resp.status_code
-
-
-def send_webhook(webhook, itemimageurl, id):
-    data = {
-        "content": "",
-        "embeds": [
-            {
-                "title": "RBXFlip Giveaway Joiner",
-                "description": f"Giveaway joined!\n\n[Giveaway ID: {id}](",
-                "color": 10085589,
-                "thumbnail": {
-                    "url": itemimageurl
-                }
+def join_giveaways(giveaways: list, fliptoken):
+    joinedgiveaways = []
+    with requests.Session() as session:
+        for giveaway in giveaways:
+            giveawayid = giveaway['_id']
+            headers = {
+                "authorization": f"Bearer {fliptoken}"
             }
-        ],
-        "username": "RFGJ",
-        "avatar_url": "https://i.imgur.com/KMTZO4n.jpeg",
-        "attachments": []
-    }
-
-    resp = requests.post(webhook, json=data)
-
-    if resp.status_code == 204 or resp.status_code == 200:
-        return "Successfully sent webhook."
-    else:
-        print(f"Something went wrong when sending a webhook. Status Code: {resp.status_code}")
-        try:
+            resp = session.put(f'https://legacy.rbxflip-apis.com/giveaways/{giveawayid}', headers=headers)
             resp.raise_for_status()
-        except requests.HTTPError as error:
-            print(error)
+            joinedgiveaways.append((giveawayid, giveaway['item']['assetId']))
+    return joinedgiveaways
+
+
+def send_webhooks(webhook, joinedgiveaways: list):
+    for giveawaytuple in joinedgiveaways:
+        giveawayid, assetId = giveawaytuple
+        image = get_image(assetId)
+        data = {
+            "content": "",
+            "embeds": [
+                {
+                    "title": "RBXFlip Giveaway Joiner",
+                    "description": f"Giveaway joined!\n\nGiveaway ID: {giveawayid}",
+                    "color": 10085589,
+                    "thumbnail": {
+                        "url": image
+                    }
+                }
+            ],
+            "username": "RFGJ",
+            "avatar_url": "https://i.imgur.com/KMTZO4n.jpeg",
+            "attachments": []
+        }
+
+        resp = requests.post(webhook, json=data)
+
+        if resp.status_code == 204 or resp.status_code == 200:
+            print("Successfully sent webhook.")
+        else:
+            print(f"Something went wrong when sending a webhook. Status Code: {resp.status_code}")
+            try:
+                resp.raise_for_status()
+            except requests.HTTPError as error:
+                print(error)
 
 
 def main():
     token, interval, webhook = load_config()
 
-    if input("debugging on? (only turn this on if asked to) | y or n ").lower() == "y":
+    if input("Debugging on? (only turn this on if asked to.) | Y or N | ").lower() == "y":
         debugging = True
     else:
         debugging = False
@@ -83,21 +92,19 @@ def main():
 
         if debugging:
             print(giveaways)
+        opengiveaways = []
 
-        if giveaways and giveaways[1][0]:
-            giveaway = giveaways[1][0]
+        if giveaways:
+            for giveaway in giveaways[1]:
 
-            if giveaway['status'] == "Open":
-                response = join_giveaway(giveaway['_id'], token)
+                if giveaway['status'] == "Open":
+                    opengiveaways.append(giveaway)
 
-                if response == 200:
-                    image = get_image(giveaway['item']['assetId'])
-                    id = giveaway['_id']
-                    print(send_webhook(webhook, image, id))
-                else:
-                    print(response)
+            if opengiveaways:
+                joinedgiveaways = join_giveaways(opengiveaways, token)
+                send_webhooks(webhook, joinedgiveaways)
 
-            elif giveaway['status'] != "Open":
+            elif not opengiveaways:
                 print("No open giveaways found.")
 
         elif not giveaways:
