@@ -33,55 +33,62 @@ def get_image(itemid):
     return itemimage
 
 
-def join_giveaways(giveaways: list, fliptoken):
+def join_giveaways(giveaways: list, fliptoken, joinedgiveaways):
     joinedgiveaways = []
     with requests.Session() as session:
         for giveaway in giveaways:
-            giveawayid = giveaway['_id']
-            headers = {
-                "authorization": f"Bearer {fliptoken}"
-            }
-            resp = session.put(f'https://legacy.rbxflip-apis.com/giveaways/{giveawayid}', headers=headers)
-            resp.raise_for_status()
-            joinedgiveaways.append((giveawayid, giveaway['item']['assetId']))
+            if giveaway not in joinedgiveaways:
+                giveawayid = giveaway['_id']
+                headers = {
+                    "authorization": f"Bearer {fliptoken}"
+                }
+                resp = session.put(f'https://legacy.rbxflip-apis.com/giveaways/{giveawayid}', headers=headers)
+                if resp.status_code != 200:
+                    print(f"Something went wrong when joining Giveaway {giveawayid}. Status Code: {resp.status_code}")
+                else:
+                    joinedgiveaways.append((giveawayid, giveaway['item']['assetId'], False))
     return joinedgiveaways
 
 
 def send_webhooks(webhook, joinedgiveaways: list):
     for giveawaytuple in joinedgiveaways:
-        giveawayid, assetId = giveawaytuple
-        image = get_image(assetId)
-        data = {
-            "content": "",
-            "embeds": [
-                {
-                    "title": "RBXFlip Giveaway Joiner",
-                    "description": f"Giveaway joined!\n\nGiveaway ID: {giveawayid}",
-                    "color": 10085589,
-                    "thumbnail": {
-                        "url": image
+        giveawayid, assetId, sentwebhook = giveawaytuple
+        if not sentwebhook:
+            image = get_image(assetId)
+            data = {
+                "content": "",
+                "embeds": [
+                    {
+                        "title": "RBXFlip Giveaway Joiner",
+                        "description": f"Giveaway joined!\n\nGiveaway ID: {giveawayid}",
+                        "color": 10085589,
+                        "thumbnail": {
+                            "url": image
+                        }
                     }
-                }
-            ],
-            "username": "RFGJ",
-            "avatar_url": "https://i.imgur.com/KMTZO4n.jpeg",
-            "attachments": []
-        }
+                ],
+                "username": "RFGJ",
+                "avatar_url": "https://i.imgur.com/KMTZO4n.jpeg",
+                "attachments": []
+            }
 
-        resp = requests.post(webhook, json=data)
+            resp = requests.post(webhook, json=data)
 
-        if resp.status_code == 204 or resp.status_code == 200:
-            print("Successfully sent webhook.")
-        else:
-            print(f"Something went wrong when sending a webhook. Status Code: {resp.status_code}")
-            try:
-                resp.raise_for_status()
-            except requests.HTTPError as error:
-                print(error)
+            if resp.status_code == 204 or resp.status_code == 200:
+                joinedgiveaways[joinedgiveaways.index(giveawaytuple)][2] = True
+                print("Successfully sent webhook.")
+            else:
+                print(f"Something went wrong when sending a webhook. Status Code: {resp.status_code}")
+                try:
+                    resp.raise_for_status()
+                except requests.HTTPError as error:
+                    print(error)
+    return joinedgiveaways
 
 
 def main():
     token, interval, webhook = load_config()
+    joinedgiveaways = []
 
     if input("Debugging on? (only turn this on if asked to.) | Y or N | ").lower() == "y":
         debugging = True
@@ -91,6 +98,7 @@ def main():
         giveaways = get_giveaways()
 
         if debugging:
+            print(f"joined gws: {joinedgiveaways}")
             print(giveaways)
         opengiveaways = []
 
@@ -101,8 +109,8 @@ def main():
                     opengiveaways.append(giveaway)
 
             if opengiveaways:
-                joinedgiveaways = join_giveaways(opengiveaways, token)
-                send_webhooks(webhook, joinedgiveaways)
+                joinedgiveaways.append(join_giveaways(opengiveaways, token, joinedgiveaways))
+                joinedgiveaways = (webhook, joinedgiveaways)
 
             elif not opengiveaways:
                 print("No open giveaways found.")
