@@ -2,7 +2,13 @@
 
 An automatic giveaway joiner for RBXFlip.
 
-Inspired by foobball.
+- Inspired by [foobball](https://github.com/foobball) and [htach](https://github.com/htach).
+- Credit to htach for [fprint](https://github.com/htach/mass-send/blob/main/main.py#L31).
+
+# Notice:
+
+For the forseeable future, this will not be a multi-account joiner. I have made an agreement to keep this program single-account.
+Thank you for understanding.
 
 # Installation:
 
