@@ -3,7 +3,7 @@
 An automatic giveaway joiner for RBXFlip.
 
 - Inspired by [foobball](https://github.com/foobball) and [htach](https://github.com/htach).
-- Credit to htach for [fprint](https://github.com/htach/mass-send/blob/main/main.py#L31).
+- Credit to htach for [fprint](https://github.com/htach/mass-send/blob/main/main.py#L30).
 
 # Notice:
 
