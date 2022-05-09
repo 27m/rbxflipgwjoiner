@@ -121,7 +121,6 @@ def main():
             giveaways = get_giveaways()
             time.sleep(0.5)
         if giveaways:
-            print(f"joined: {user.joined}")
             for giveaway in giveaways:
                 if giveaway['_id'] not in user.joined:
                     if giveaway['status'] != "Open":
