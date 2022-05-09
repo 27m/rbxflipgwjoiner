@@ -1,1 +1,4 @@
-requests
+httpx>=0.22.0
+requests>=2.27.1
+cloudscraper>=1.2.60
+rich>=12.4.1
